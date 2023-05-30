@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo2
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: demo2
+  template:
+    metadata:
+      labels:
+        app: demo2
+    spec:
+      containers:
+        - name: demo2
+          image: hamgeonwook/demo2:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo2-service
+spec:
+  ports:
+    - port: 9003
+      targetPort: 8080
+      protocol: TCP
+  selector:
+    app: demo2

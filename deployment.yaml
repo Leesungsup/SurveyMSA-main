@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+        - name: surveyanswer
+          image: hamgeonwook/surveyanswer:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+        - name: surveydocument
+          image: hamgeonwook/surveydocument:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+        - name: surveyanalyze
+          image: hamgeonwook/surveyanalyze:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql-db
+  template:
+    metadata:
+      labels:
+        app: mysql-db
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:latest
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: admin
+            - name: MYSQL_DATABASE
+              value: surveydb
